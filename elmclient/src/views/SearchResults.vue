@@ -75,7 +75,7 @@ export default {
       businessArr: [],
       foodArr: [],
       user: {},
-      curTab: this.$getSessionStorage('defaultTab')
+      curTab: this.$getSessionStorage('defaultTab')===null?0:this.$getSessionStorage('defaultTab')
     }
   },
   created() {
