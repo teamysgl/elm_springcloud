@@ -1,12 +1,9 @@
 drop table if exists `coupon`;
-Create table coupon(
-
-couponId int,
-userId int(11),
-limitNum int,
-minusNum int,
-couponDate Varchar(50),
-outDate Varchar(50),
-primary key(couponId)
-
+CREATE TABLE coupon (
+    couponId INT AUTO_INCREMENT PRIMARY KEY,
+    userId VARCHAR(11),
+    limitNum INT,
+    minusNum INT,
+    couponDate VARCHAR(50),
+    outDate VARCHAR(50)
 );
