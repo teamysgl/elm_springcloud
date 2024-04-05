@@ -17,7 +17,8 @@
       <div class="search-fixed-top" ref="fixedBox">
         <!-- 搜索框部分中间的白框 -->
         <div class="search-box">
-          <i @click="toSearch()" :class="{'fa fa-search': true, 'blue-icon': keyword!==''}"></i><input type="text" v-model="keyword" placeholder="搜索饿了么商家、商品名称">
+          <i @click="toSearch()" :class="{'fa fa-search': true, 'blue-icon': keyword!==''}"></i>
+          <input type="text" v-model="keyword" placeholder="搜索饿了么商家、商品名称" @keydown.enter="toSearch()" >
         </div>
       </div>
     </div>

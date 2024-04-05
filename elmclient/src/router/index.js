@@ -18,6 +18,9 @@ import PointsDetails from '../views/PointsDetails.vue';
 import Wallet from '../views/Wallet.vue';
 import Error403 from '../components/Error403';
 import SearchResults from "../views/SearchResults";
+import PointStore from '../views/PointStore.vue';
+import CouponDetails from '../views/CouponDetails.vue';
+import CouponSelect from '../views/CouponSelect.vue';
 
 
 const routes = [{
@@ -88,6 +91,19 @@ const routes = [{
 		path: '/searchResults',
 		name: 'SearchResults',
 		component: SearchResults
+	},{
+		path: '/PointStore',
+		name: 'PointStore',
+		component: PointStore
+	}, {
+		path: '/CouponDetails',
+		name: 'CouponDetails',
+		component: CouponDetails
+	},
+	{
+		path: '/CouponSelect',
+		name: 'CouponSelect',
+		component: CouponSelect
 	}
 ];
 

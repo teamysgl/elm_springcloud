@@ -26,7 +26,9 @@ public class SearchServiceImpl implements SearchService {
         Result res = ToAnalysis.parse(query);
         List<String> keywords=new ArrayList<>();
         for(Term term:res){
-            keywords.add(term.getName());
+            if(!term.getName().matches("^\\s+$")){
+                keywords.add(term.getName());
+            }
         }
         return foodMapper.listFoodByKeyWord(keywords);
     }
