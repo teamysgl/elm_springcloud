@@ -140,8 +140,13 @@ export default {
       });
     },
     highlightKeyword(text) {
-      let regex = new RegExp(this.$route.query.keyword, 'g');
-      return text.replace(regex, `<span style="color: #01B0F2;">${this.$route.query.keyword}</span>`);
+      let res=text
+      for(let i of this.$route.query.keyword){
+        if(/\s/.test(i)) continue
+        let regex = new RegExp(i, 'g')
+        res=res.replace(regex, `<span style="color: #01B0F2;">${i}</span>`)
+      }
+      return res
     },
     toSearch() {
       if (this.keyword === '') return;
