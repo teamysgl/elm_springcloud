@@ -60,10 +60,27 @@
 					</div>
 				</li>
 
+
 				<li>
 					<div class="red" @click="toWallet">
 						<img src="../assets/img/红包.png">
 						<p>我的钱包</p>
+						<span>&#62;</span>
+					</div>
+				</li>
+				<!-- 积分商城，积分系统新增部分 -->
+				<li>
+					<div class="red" @click="toPointStore">
+						<img src="../assets/img/红包.png">
+						<p>积分商城</p>
+						<span>&#62;</span>
+					</div>
+				</li>
+				
+				<li>
+					<div class="red" @click="toCouponDetails">
+						<img src="../assets/img/红包.png">
+						<p>我的券包</p>
 						<span>&#62;</span>
 					</div>
 				</li>
@@ -173,6 +190,21 @@
 				this.$router.push({
 					path: '/userAddress'
 				});
+			},
+			// 积分系统新增部分
+			toPointStore(){
+				console.log("to Point Store");
+				this.$router.push({
+					path: '/PointStore'
+				});
+			},
+			toCouponDetails()
+			{
+				this.$router.push(
+				{
+					path:'/CouponDetails'
+				}
+				);
 			}
 		}
 	};

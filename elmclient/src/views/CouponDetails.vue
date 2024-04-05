@@ -3,16 +3,16 @@
 		<!-- header部分 -->
 		<header>
 			<i class="fa fa-angle-left" @click="back"></i>
-			<p>积分记录</p>
+			<p>我的券包</p>
 		</header>
 
 		<div class="points-total">
 			<div class="num">
-				<img src="../assets/吃货豆.png">
-				<p style="color: goldenrod;">{{ sum }}</p>
+				<!-- <img src="../assets/吃货豆.png">
+				<p style="color: goldenrod;">{{ sum }}</p> -->
 			</div>
 			<div class="text">
-				<p>积分有效期180天，记得使用哟</p>
+				<p>券包有效期三天，记得使用哦~</p>
 			</div>
 		</div>
 
@@ -29,7 +29,7 @@
 								<h4>获取时间</h4>
 							</li>
 							<li>
-								<h4>剩余数量</h4>
+								<h4>券名</h4>
 							</li>
 							<li>
 								<h4>过期时间</h4>
@@ -39,10 +39,10 @@
 					<li class="li1">
 						<ul class="details"  v-for="item in availablePointArr">
 							<li>
-								<h4>{{item.pointDate}}</h4>
+								<h4>{{item.couponDate}}</h4>
 							</li>
 							<li>
-								<p>{{ item.pointNum }}</p>
+								<p>满{{ item.limitNum }}减{{item.minusNum}}券</p>
 							</li>
 							<li>
 								<p style="color: green;">{{ item.outDate }}</p>
@@ -104,19 +104,28 @@
 			console.log("PointsDetail, Here");
 			this.user = this.$getSessionStorage('user');
 
-			this.$axios.get('PointController/AvailablePoints',{
-				params:{
-					userId: this.user.userId
-				},
-				headers: {
-					Authorization:this.user.password
-				}
-			}).then(response => {
-				// 积分系统新增的改动
+			// this.$axios.get('PointController/AvailablePoints',{
+			// 	params:{
+			// 		userId: this.user.userId
+			// 	},
+			// 	headers: {
+			// 		Authorization:this.user.password
+			// 	}
+			// }).then(response => {
+			// 	// 积分系统新增的改动
+			// 	let result = response.data.result;
+			// 	this.availablePointArr = result;
+			// 	console.log(response);
+			// 	 // console.log(this.user.userId+" "+this.user.password);
+			// }).catch(error => {
+			// 	console.error(error);
+			// });
+			
+			this.$axios.get(`CouponController/getCouponByUserId/${this.user.userId}`)
+			.then(response=>{
 				let result = response.data.result;
 				this.availablePointArr = result;
-				console.log(response);
-				 // console.log(this.user.userId+" "+this.user.password);
+				
 			}).catch(error => {
 				console.error(error);
 			});

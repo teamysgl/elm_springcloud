@@ -39,6 +39,11 @@
 <!--				<p>{{ totalPoint }}积分(每100积分抵扣&#165;1.00)</p>-->
 <!--				<p>-&#165;{{del.toFixed(2)}}</p>-->
 <!--			</div>-->
+
+			<div class="coupon-select" @click="toCouponSelect">
+				<p>选择消费券</p>
+				<p>{{getCouponName()}}</p>
+			</div>
 		</div>
 		<!-- 合计部分 -->
 		<div class="total">
@@ -64,13 +69,14 @@
 				user: {},
 				cartArr: [],
 				deliveryaddress: {},
-				availablePointArr: []
+				availablePointArr: [],
+				couponUsed:{}
 			}
 		},
 		created() {
 			this.user = this.$getSessionStorage('user');
 			this.deliveryaddress = this.$getLocalStorage(this.user.userId);
-
+			this.couponUsed=this.$getLocalStorage(this.businessId);
 			//查询当前商家
       let businessUrl=`BusinessController/getBusinessById/${this.businessId}`
 			this.$axios.get(businessUrl).then(response => {
@@ -119,6 +125,12 @@
 				}
 				totalPrice += this.business.deliveryPrice;
 				// totalPrice -= this.del;
+				
+				//积分券包界面新增
+				if(this.couponUsed!=null)
+				{
+					totalPrice-=this.couponUsed.minusNum;
+				}
 				return totalPrice;
 			}
 		},
@@ -144,10 +156,15 @@
 				}
 
 				//创建订单
+				
         let url=`OrdersController/createOrders/${this.user.userId}/${this.businessId}/${this.deliveryaddress.daId}/${this.totalPrice}`
 				this.$axios.post(url).then(response => {
 					let orderId = response.data.result;
 					if (orderId > 0) {
+						//积分系统新增代码
+						if(this.couponUsed!=null)
+						{
+						this.$axios.delete(`CouponController/deleteCouponByCouponId/${this.couponUsed.couponId}`);
 						this.$router.push({
 							path: '/payment',
 							query: {
@@ -156,12 +173,36 @@
 								reduction: this.del
 							}
 						});
+						 this.$removeSessionStorage(this.businessId);
+						}
+						
 					} else {
 						alert('创建订单失败！');
 					}
 				}).catch(error => {
 					console.error(error);
 				});
+			},
+			toCouponSelect()
+			{
+				this.$router.push(
+				{
+					path:'/CouponSelect',
+					query: {
+						businessId: this.businessId
+					}
+				});
+			},
+			getCouponName()
+			{
+				if(this.couponUsed==null)
+				{
+					return "不使用优惠券";
+				}
+				else
+				{
+					return "满"+this.couponUsed.limitNum+"减"+this.couponUsed.minusNum+"优惠券";
+				}
 			}
 		}
 	}
@@ -315,6 +356,19 @@
 		justify-content: space-between;
 		align-items: center;
 		font-size: 3.5vw;
+	}
+	
+	.wrapper .coupon-select {
+		width: 100%;
+		height: 16vw;
+		box-sizing: border-box;
+		padding: 3vw;
+		color: #666;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 3.5vw;
+		cursor: pointer;
 	}
 
 	/****************** 订单合计部分 ******************/
