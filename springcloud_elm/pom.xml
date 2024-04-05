@@ -23,6 +23,7 @@
         <module>orders_server_10601</module>
         <module>config_server_15000</module>
         <module>config_server_15001</module>
+        <module>search_server_116000</module>
     </modules>
     <packaging>pom</packaging>
 

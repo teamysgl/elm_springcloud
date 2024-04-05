@@ -17,6 +17,7 @@ import My from '../views/My.vue';
 import PointsDetails from '../views/PointsDetails.vue';
 import Wallet from '../views/Wallet.vue';
 import Error403 from '../components/Error403';
+import SearchResults from "../views/SearchResults";
 
 
 const routes = [{
@@ -83,6 +84,10 @@ const routes = [{
 		path: '/error403',
 		name: 'Error403',
 		component: Error403
+	}, {
+		path: '/searchResults',
+		name: 'SearchResults',
+		component: SearchResults
 	}
 ];
 
