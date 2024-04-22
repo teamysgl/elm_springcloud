@@ -90,17 +90,17 @@
 		created() {
 			this.user = this.$getSessionStorage('user');
 			//根据businessId查询商家信息
-      let url=`BusinessController/getBusinessById/${this.businessId}`
+			let url = `BusinessController/getBusinessById/${this.businessId}`
 			this.$axios.get(url).then(response => {
 				this.business = response.data.result;
-        this.foodArr = this.business.foodList;
-        for (let i = 0; i < this.foodArr.length; i++) {
-          this.foodArr[i].quantity = 0;
-        }
-        //如果已登录，那么需要去查询购物车中是否已经选购了某个食品
-        if (this.user != null) {
-          this.listCart();
-        }
+				this.foodArr = this.business.foodList;
+				for (let i = 0; i < this.foodArr.length; i++) {
+					this.foodArr[i].quantity = 0;
+				}
+				//如果已登录，那么需要去查询购物车中是否已经选购了某个食品
+				if (this.user != null) {
+					this.listCart();
+				}
 			}).catch(error => {
 				console.error(error);
 			});
@@ -110,7 +110,7 @@
 				this.$router.go(-1);
 			},
 			listCart() {
-        let url=`CartController/listCart/${this.user.userId}/${this.businessId}`
+				let url = `CartController/listCart/${this.user.userId}/${this.businessId}`
 				this.$axios.get(url).then(response => {
 					let cartArr = response.data.result;
 					//遍历所有食品列表
@@ -166,7 +166,7 @@
 				this.interval = 200;
 			},
 			savaCart(index) {
-        let url=`CartController/saveCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}`
+				let url = `CartController/saveCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}`
 				this.$axios.post(url).then(response => {
 					if (response.data.result == 1) {
 						//此食品数量要更新为1；
@@ -180,7 +180,8 @@
 				});
 			},
 			updateCart(index, num) {
-        let url=`CartController/updateCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}/${this.foodArr[index].quantity + num}`
+				let url =
+					`CartController/updateCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}/${this.foodArr[index].quantity + num}`
 				this.$axios.put(url).then(response => {
 					if (response.data.result == 1) {
 						//此食品数量要更新为1或-1；
@@ -194,7 +195,7 @@
 				});
 			},
 			removeCart(index) {
-        let url=`CartController/removeCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}`
+				let url = `CartController/removeCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}`
 				this.$axios.delete(url).then(response => {
 					if (response.data.result == 1) {
 						//此食品数量要更新为0；视图的减号和数量要消失
@@ -251,9 +252,11 @@
 	/****************header部分***************/
 	.wrapper header {
 		width: 100%;
-		height: 12vw;
+		height: 14vw;
+		/* 增大header高度 */
 		background-color: #01B0F2;
-		font-size: 4.8vw;
+		font-size: 5vw;
+		/* 调整字体大小 */
 		color: #fff;
 
 		z-index: 10;
@@ -268,21 +271,26 @@
 	}
 
 	.wrapper header i {
-		margin: 0vw 0vw 0vw 3vw;
-		font-size: 6vw;
+		margin: 0vw 0vw 0vw 4vw;
+		/* 调整返回按钮的间距 */
+		font-size: 7vw;
+		/* 调整返回按钮的大小 */
 		user-select: none;
 		cursor: pointer;
 	}
 
 	.wrapper header p {
-		margin: 0vw 0vw 0vw 33.5vw;
+		margin: 0vw 0vw 0vw 35vw;
+		/* 调整标题的间距 */
 	}
 
 	/****************商家logo部分***************/
 	.wrapper .business-logo {
 		width: 100%;
-		height: 35vw;
-		padding-top: 12vw;
+		height: 40vw;
+		/* 增大商家logo部分高度 */
+		padding-top: 14vw;
+		/* 调整商家logo上方间距 */
 
 		display: flex;
 		justify-content: center;
@@ -290,15 +298,19 @@
 	}
 
 	.wrapper .business-logo img {
-		width: 40vw;
-		height: 30vw;
-		border-radius: 2vw;
+		width: 45vw;
+		/* 增大商家logo图片尺寸 */
+		height: 35vw;
+		/* 调整商家logo图片尺寸 */
+		border-radius: 2.5vw;
+		/* 调整边框圆角 */
 	}
 
 	/****************商家信息部分***************/
 	.wrapper .business-info {
 		width: 100%;
-		height: 20vw;
+		height: 25vw;
+		/* 增大商家信息部分高度 */
 
 		display: flex;
 		flex-direction: column;
@@ -307,31 +319,46 @@
 	}
 
 	.wrapper .business-info h1 {
-		font-size: 5vw;
+		font-size: 6vw;
+		/* 调整商家名称字体大小 */
 
 	}
 
 	.wrapper .business-info p {
-		font-size: 3vw;
+		font-size: 4vw;
+		/* 调整商家信息字体大小 */
 		color: #666;
-		margin-top: 1.2vw;
+		margin-top: 1.5vw;
+		/* 调整商家信息顶部间距 */
 	}
+
+	<style scoped>
 
 	/****************食品信息部分***************/
 	.wrapper .food {
 		width: 100%;
-		padding-bottom: 14vw;
+		padding-bottom: 16vw;
+		/* 增大底部填充 */
 	}
 
 	.wrapper .food li {
 		width: 100%;
 		box-sizing: border-box;
-		padding: 2.5vw;
+		padding: 3vw;
+		/* 调整内边距 */
 		user-select: none;
 
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+
+		transition: all 0.3s ease;
+		/* 添加过渡效果 */
+	}
+
+	.wrapper .food li:hover {
+		background-color: #f4f4f4;
+		/* 鼠标悬停时背景色变化 */
 	}
 
 	.wrapper .food li .food-left {
@@ -340,49 +367,69 @@
 	}
 
 	.wrapper .food li .food-left img {
-		width: 20vw;
-		height: 20vw;
-		border-radius: 1vw;
+		width: 22vw;
+		/* 增大食品图片尺寸 */
+		height: 22vw;
+		/* 增大食品图片尺寸 */
+		border-radius: 1.5vw;
+		/* 调整边框圆角 */
+		transition: all 0.3s ease;
+		/* 添加过渡效果 */
+	}
+
+	.wrapper .food li .food-left img:hover {
+		transform: scale(1.05);
+		/* 鼠标悬停时放大图片 */
 	}
 
 	.wrapper .food li .food-left .food-left-info {
-		margin-left: 3vw;
+		margin-left: 4vw;
+		/* 调整左侧信息的间距 */
 
 	}
 
 	.wrapper .food li .food-left .food-left-info h3 {
-		font-size: 3.8vw;
+		font-size: 4vw;
+		/* 调整标题字体大小 */
 		color: #555;
 	}
 
 	.wrapper .food li .food-left .food-left-info p {
-		font-size: 3vw;
+		font-size: 3.2vw;
+		/* 调整文本字体大小 */
 		color: #888;
-		margin-top: 2vw;
+		margin-top: 2.5vw;
+		/* 调整顶部间距 */
 	}
 
 	.wrapper .food li .food-right {
-		width: 16vw;
+		width: 18vw;
+		/* 增大右侧部分宽度 */
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
 
-	.wrapper .food li .food-right .fa-minus-circle {
-		font-size: 5.5vw;
+	.wrapper .food li .food-right .fa-minus-circle,
+	.wrapper .food li .food-right .fa-plus-circle {
+		font-size: 6vw;
+		/* 调整按钮图标大小 */
 		color: #999;
 		cursor: pointer;
+		transition: all 0.3s ease;
+		/* 添加过渡效果 */
+	}
+
+	.wrapper .food li .food-right .fa-minus-circle:hover,
+	.wrapper .food li .food-right .fa-plus-circle:hover {
+		color: #01B0F2;
+		/* 鼠标悬停时按钮颜色变化 */
 	}
 
 	.wrapper .food li .food-right p {
-		font-size: 3.6vw;
+		font-size: 4vw;
+		/* 调整数量文本字体大小 */
 		color: #333;
-	}
-
-	.wrapper .food li .food-right .fa-plus-circle {
-		font-size: 5.5vw;
-		color: #01B0F2;
-		cursor: pointer;
 	}
 
 	/****************** 购物车部分 ******************/

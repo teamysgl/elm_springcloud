@@ -25,8 +25,13 @@
 				<p>&#165;{{orders.business.deliveryPrice}}</p>
 			</li>
 			<li>
-				<p>积分</p>
+				<p>消费券减免</p>
 				<p>-&#165;{{reduction}}</p>
+			</li>
+			<!-- 积分系统新增显示 -->
+			<li>
+				<p>获得积分</p>
+				<p>{{orders.orderTotal*10}}</p>
 			</li>
 		</ul>
 		<!-- 支付方式部分 -->
@@ -40,7 +45,7 @@
 			</li>
 		</ul>
 		<div class="payment-button">
-			<button  :style="{ backgroundColor: isPayed ? 'gray' :  '#38CA73'}" @click="pay">确认支付</button>
+			<button :style="{ backgroundColor: isPayed ? 'gray' :  '#38CA73'}" @click="pay">确认支付</button>
 		</div>
 		<h2 v-show="paySuccess" style="color: #0097FF;text-align: center;">
 			支付成功！
@@ -67,7 +72,7 @@
 			}
 		},
 		created() {
-      let url=`OrdersController/getOrdersById/${this.orderId}`
+			let url = `OrdersController/getOrdersById/${this.orderId}`
 			this.$axios.get(url).then(response => {
 				this.orders = response.data.result;
 			}).catch(error => {
@@ -89,8 +94,8 @@
 			window.onpopstate = null;
 		},
 		computed: {
-			pointGot(){
-				let res=this.orders.orderTotal+this.reduction;
+			pointGot() {
+				let res = this.orders.orderTotal + this.reduction;
 				return Math.floor(res);
 			}
 		},
@@ -99,31 +104,55 @@
 				this.isShowDetailet = !this.isShowDetailet;
 			},
 			pay() {
-				this.$axios.put('OrdersController/Orders', this.$qs.stringify({
-					orderId: this.orderId,
-					userId: this.userId,
-					orderTotal: this.orders.orderTotal,
-					reduction: this.reduction
-				}),{
-					headers: {
-						Authorization:this.$getSessionStorage('user').password
-					}
-				}).then(response => {
-					let orderId = response.data;
-					if (orderId > 0) {
-						this.paySuccess=true;
-						this.isPayed=true;
-						setTimeout(() => {
+				// this.$axios.put('OrdersController/Orders', this.$qs.stringify({
+				// 	orderId: this.orderId,
+				// 	userId: this.userId,
+				// 	orderTotal: this.orders.orderTotal,
+				// 	reduction: this.reduction
+				// }),{
+				// 	headers: {
+				// 		Authorization:this.$getSessionStorage('user').password
+				// 	}
+				// }).then(response => {
+				// 	let orderId = response.data;
+				// 	if (orderId > 0) {
+				// 		this.paySuccess=true;
+				// 		this.isPayed=true;
+				// 		setTimeout(() => {
+				// 			this.$router.push({
+				// 			path: '/orderList'
+				// 		});
+				// 		}, 500);
+				// 	} else {
+				// 		alert('支付失败！');
+				// 	}
+				// }).catch(error => {
+				// 	console.error(error);
+				// });
+
+				console.log("Kicked");
+				let url = `OrdersController/Orders/${this.orderId}`
+				this.$axios.put(url)
+					.then(
+						response => {
+							console.log(response);
+							console.log("支付成功");
+							let url =
+								`PointController/addPointByPointId/${this.userId}/${this.orders.orderDate}/${this.orders.orderTotal*10}`
+							console.log(url);
+							this.$axios.post(url).then(response => {
+								console.log(response.data);
+							});
 							this.$router.push({
-							path: '/orderList'
-						});
-						}, 500);
-					} else {
-						alert('支付失败！');
-					}
-				}).catch(error => {
-					console.error(error);
-				});
+								path: '/orderList'
+							});
+						}
+					)
+					.catch(error => {
+						console.error(error);
+					});
+
+
 			}
 		},
 		components: {

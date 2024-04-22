@@ -13,13 +13,13 @@
 		<!------自动识别------>
 		<div class="identify">
 			<input type="text" placeholder="  粘贴地址,智能识别填写" v-model="addressInfo">
-			<button  @click="fill">
+			<button @click="fill">
 				<p>AI识别</p>
 			</button>
 		</div>
 
 		<!------列表------>
-		<ul class="form">		
+		<ul class="form">
 			<li>
 				<div class="title">
 					收货人：
@@ -44,7 +44,7 @@
 					<input type="text" placeholder="  填写收获人手机号码" v-model="deliveryAddress.contactTel">
 				</div>
 			</li>
-			
+
 			<li>
 				<div class="title">
 					地址：
@@ -53,12 +53,12 @@
 					<input type="text" placeholder="  填写详细地址,精确到门牌号" v-model="deliveryAddress.address">
 				</div>
 			</li>
-			
+
 		</ul>
 
 		<!------确认修改------>
 		<div class="ok">
-			<button  @click="addUserAddress">
+			<button @click="addUserAddress">
 				<p>保存修改</p>
 			</button>
 
@@ -130,7 +130,8 @@
 					return;
 				}
 
-        let url=`DeliveryAddressController/saveDeliveryAddress/${this.deliveryAddress.contactName}/${this.deliveryAddress.contactSex}/${this.deliveryAddress.contactTel}/${this.deliveryAddress.address}/${this.user.userId}`
+				let url =
+					`DeliveryAddressController/saveDeliveryAddress/${this.deliveryAddress.contactName}/${this.deliveryAddress.contactSex}/${this.deliveryAddress.contactTel}/${this.deliveryAddress.address}/${this.user.userId}`
 				this.$axios.post(url).then(response => {
 					if (response.data.result > 0) {
 						this.$router.push({
@@ -147,8 +148,8 @@
 				});
 			},
 			fill() {
-				this.$axios.get('DeliveryAddressController/AddressInfo',{
-					params:{
+				this.$axios.get('DeliveryAddressController/AddressInfo', {
+					params: {
 						addressInfo: this.addressInfo
 					}
 				}).then(response => {
@@ -168,147 +169,159 @@
 		width: 100vw;
 		position: absolute;
 	}
-	
+
 	/******head部分********/
 	.wrapper header {
 		width: 100%;
 		height: 12vw;
 		background-color: #01B0F2;
-		font-size: 4.8vw;
+		font-size: 5.5vw;
 		color: #fff;
-	
 		z-index: 10;
-	
 		display: flex;
-		justify-content: flex-start;
+		justify-content: center;
 		align-items: center;
-	
 		position: fixed;
 		left: 0;
 		top: 0;
+		transition: all 0.3s ease;
 	}
-	
+
 	.wrapper header i {
-		margin: 0vw 0vw 0vw 3vw;
-		font-size: 6vw;
+		margin-right: 3vw;
+		font-size: 7vw;
 		user-select: none;
 		cursor: pointer;
 	}
-	
+
 	.wrapper header p {
-		margin: 0vw 0vw 0vw 33.5vw;
+		margin-left: 3vw;
 	}
-	
+
+
 	.wrapper .shangbiao {
-		width:100vw;
+		width: 100vw;
 		height: 20vw;
-		margin-top: 20vw;
+		margin-top: 14vw;
 		display: flex;
 		justify-content: center;
+		box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 	}
-	
-	.wrapper .shangbiao img{
+
+
+	.wrapper .shangbiao img {
 		width: 30vw;
 		height: 25vw;
 	}
-	
+
 	/*******自动识别********/
 	.wrapper .identify {
 		width: 100vw;
 		height: 18vw;
-		
+
 		margin-top: 2vw;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
-	
+
 	.wrapper .identify input {
-		width: 70%;
-		height: 8vw;
-		font-size: 4vw;
+		width: 80%;
+		height: 10vw;
+		font-size: 4.5vw;
 		background-color: #d4ebfe;
-		border-radius: 2.5vw;
+		border-radius: 5vw;
 		outline: none;
-		border-style: dotted;
+		border: none;
+		padding: 0 2vw;
+		box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 	}
-	
-	.wrapper .identify button{
-		width: 14vw;
-		height: 8vw;
-		border-radius: 3vw;
+
+	.wrapper .identify button {
+		width: 16vw;
+		height: 10vw;
+		border-radius: 5vw;
 		margin-left: 3vw;
+		background-color: #01B0F2;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		transition: all 0.3s ease;
 	}
-	
-	.wrapper .identify button p{
-	    font-size: 3.5vw;
+
+	.wrapper .identify button p {
+		font-size: 4vw;
+		color: #fff;
 	}
-	
-	
+
+	.wrapper .identify button:hover {
+		transform: scale(1.1);
+	}
+
+
+
 	/******列表******/
-	.wrapper .form{
+	.wrapper .form {
 		width: 100vw;
 		margin-top: 2vw;
 	}
-	
+
 	.wrapper .form li {
 		box-sizing: border-box;
-		padding: 4vw 3vw 0 3vw;
-		
+		padding: 3vw 3vw 0 3vw;
 		display: flex;
 		align-items: center;
 	}
-	
+
 	.wrapper .form li .title {
-		flex: 0 0 18vw;
-		font-size: 4vw;
-		font-weight: 450;
-		color: #666;
-		margin-left: 5vw;
+		flex: 0 0 20vw;
+		font-size: 4.5vw;
+		font-weight: 500;
+		color: #333;
+		margin-left: 3vw;
 	}
-	
+
 	.wrapper .form li .content {
 		flex: 1;
 	}
-	
+
 	.wrapper .form li .content input {
 		outline: none;
 		width: 90%;
 		height: 7vw;
-		font-size: 3.5vw;
+		font-size: 4vw;
+		border: none;
+		border-bottom: 1px solid #ccc;
 	}
-	
+
 	.wrapper .form li .gender {
 		width: 100vw;
 		height: 6vw;
 		display: flex;
 		justify-content: center;
 	}
-	
-	
-	
-	/*******确认修改********/
-	.wrapper .ok{
+
+	.wrapper .ok {
 		height: 20vw;
 		width: 100vw;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
-	
-	.wrapper .ok button{
+
+	.wrapper .ok button {
 		width: 35vw;
-		height: 8vw;
-		border-radius: 3vw;
-		margin-left: 3vw;
-		background-color:  #4ba0fa;
+		height: 10vw;
+		border-radius: 5vw;
+		background-color: #4ba0fa;
 		border: none;
-		margin-top: 8vw;
-	}
-	
-	.wrapper .ok p{
-		font-size: 4vw;
+		margin-top: 6vw;
+		font-size: 4.5vw;
+		font-weight: 600;
 		color: #fff;
-		font-weight: 800;
+	}
+
+	.wrapper .ok button:hover {
+		background-color: #3687d8;
 	}
 </style>

@@ -80,7 +80,7 @@
 		},
 		created() {
 			this.user = this.$getSessionStorage('user');
-      let url=`DeliveryAddressController/getDeliveryAddressById/${this.daId}`
+			let url = `DeliveryAddressController/getDeliveryAddressById/${this.daId}`
 			this.$axios.get(url).then(response => {
 				this.deliveryAddress = response.data.result;
 			}).catch(error => {
@@ -96,16 +96,16 @@
 			},
 			editUserAddress() {
 				if (this.deliveryAddress.contactName == '') {
-					this.nameVisible=true;
+					this.nameVisible = true;
 					setTimeout(() => {
-					this.nameVisible = false;
+						this.nameVisible = false;
 					}, 2000);
 					return;
 				}
 				if (this.deliveryAddress.contactTel == '') {
-					this.phoneVisible=true;
+					this.phoneVisible = true;
 					setTimeout(() => {
-					this.phoneVisible = false;
+						this.phoneVisible = false;
 					}, 2000);
 					return;
 				} else {
@@ -113,21 +113,22 @@
 					if (contactTelString.length === 11 && !isNaN(contactTelString) && contactTelString.startsWith('1')) {
 						// 数字以1开头，有11位，且全为数字
 					} else {
-						this.phoneError=true;
+						this.phoneError = true;
 						setTimeout(() => {
-						this.phoneError = false;
+							this.phoneError = false;
 						}, 2000);
 						return;
 					}
 				}
 				if (this.deliveryAddress.address == '') {
-					this.addrVisible=true;
+					this.addrVisible = true;
 					setTimeout(() => {
-					this.addrVisible = false;
+						this.addrVisible = false;
 					}, 2000);
 					return;
 				}
-        let url=`DeliveryAddressController/updateDeliveryAddress/${this.daId}/${this.deliveryAddress.contactName}/${this.deliveryAddress.contactSex}/${this.deliveryAddress.contactTel}/${this.deliveryAddress.address}`
+				let url =
+					`DeliveryAddressController/updateDeliveryAddress/${this.daId}/${this.deliveryAddress.contactName}/${this.deliveryAddress.contactSex}/${this.deliveryAddress.contactTel}/${this.deliveryAddress.address}`
 				this.$axios.put(url).then(response => {
 					if (response.data.result > 0) {
 						this.$router.push({
@@ -184,6 +185,7 @@
 	}
 
 	/*************** （表单信息） ***************/
+	/* 美化表单部分 */
 	.wrapper .form-box {
 		width: 100%;
 		margin-top: 12vw;
@@ -216,6 +218,7 @@
 		font-size: 3vw;
 	}
 
+	/* 美化按钮部分 */
 	.wrapper .button-add {
 		box-sizing: border-box;
 		padding: 4vw 3vw 0vw 3vw;
@@ -231,5 +234,21 @@
 		border-radius: 4px;
 		color: #fff;
 		background-color: #38CA73;
+		transition: background-color 0.3s;
+		/* 添加过渡效果 */
+		cursor: pointer;
+		/* 添加光标样式 */
+	}
+
+	/* 鼠标悬停效果 */
+	.wrapper .button-add button:hover {
+		background-color: #2E995D;
+		/* 改变背景颜色 */
+	}
+
+	/* 按钮点击效果 */
+	.wrapper .button-add button:active {
+		background-color: #1E6640;
+		/* 改变背景颜色 */
 	}
 </style>

@@ -10,40 +10,41 @@
 			<div class="box">
 				<h5>订单配送至：</h5>
 				<div class="order-info-address" @click="toUserAddress">
-					<p>{{deliveryaddress!=null?deliveryaddress.address:'请选择收货地址'}}</p>
+					<p>{{ deliveryaddress != null ? deliveryaddress.address : '请选择收货地址' }}</p>
 					<i class="fa fa-angle-right"></i>
 				</div>
-				<p>{{deliveryaddress!=null?deliveryaddress.contactName:''}}
-					{{deliveryaddress!=null?getSexText(deliveryaddress.contactSex):''}}
-					{{deliveryaddress!=null?deliveryaddress.contactTel:''}}
+				<p>{{ deliveryaddress != null ? deliveryaddress.contactName : '' }}
+					{{ deliveryaddress != null ? getSexText(deliveryaddress.contactSex) : '' }}
+					{{ deliveryaddress != null ? deliveryaddress.contactTel : '' }}
 				</p>
 			</div>
 		</div>
-		<h3>{{business.businessName}}</h3>
+		<h3>{{ business.businessName }}</h3>
 		<!-- 订单明细部分 -->
 		<div class="detail">
 			<ul class="order-detailed">
 				<li v-for="item in cartArr">
 					<div class="order-detailed-left">
 						<img :src="item.food.foodImg">
-						<p>{{item.food.foodName}} x {{item.quantity}}</p>
+						<p>{{ item.food.foodName }} x {{ item.quantity }}</p>
 					</div>
-					<p>&#165;{{item.food.foodPrice*item.quantity}}</p>
+					<p>&#165;{{ item.food.foodPrice * item.quantity }}</p>
 				</li>
 			</ul>
 			<div class="order-deliveryfee">
 				<p>配送费</p>
-				<p>&#165;{{business.deliveryPrice}}</p>
+				<p>&#165;{{ business.deliveryPrice }}</p>
 			</div>
-<!--			<div class="order-deliveryfee">-->
-<!--				<p>{{ totalPoint }}积分(每100积分抵扣&#165;1.00)</p>-->
-<!--				<p>-&#165;{{del.toFixed(2)}}</p>-->
-<!--			</div>-->
+
+			<div class="coupon-select" @click="toCouponSelect">
+				<p>选择消费券</p>
+				<p>{{ getCouponName() }}</p>
+			</div>
 		</div>
 		<!-- 合计部分 -->
 		<div class="total">
 			<div class="total-left">
-				&#165;{{totalPrice}}
+				&#165;{{ totalPrice }}
 			</div>
 			<div class="box">
 				<div class="total-right" @click="toPayment">
@@ -64,15 +65,16 @@
 				user: {},
 				cartArr: [],
 				deliveryaddress: {},
-				availablePointArr: []
+				availablePointArr: [],
+				couponUsed: {}
 			}
 		},
 		created() {
 			this.user = this.$getSessionStorage('user');
 			this.deliveryaddress = this.$getLocalStorage(this.user.userId);
-
+			this.couponUsed = this.$getLocalStorage(this.businessId);
 			//查询当前商家
-      let businessUrl=`BusinessController/getBusinessById/${this.businessId}`
+			let businessUrl = `BusinessController/getBusinessById/${this.businessId}`
 			this.$axios.get(businessUrl).then(response => {
 				this.business = response.data.result;
 			}).catch(error => {
@@ -80,45 +82,25 @@
 			});
 
 			//查询当前用户在购物车中的当前商家食品列表
-      let cartUrl=`CartController/listCart/${this.user.userId}/${this.businessId}`
+			let cartUrl = `CartController/listCart/${this.user.userId}/${this.businessId}`
 			this.$axios.get(cartUrl).then(response => {
 				this.cartArr = response.data.result;
 			}).catch(error => {
 				console.error(error);
 			});
-
-			// this.$axios.get('PointController/AvailablePoints',{
-			// 	params:{
-			// 		userId: this.user.userId
-			// 	},
-			// 	headers: {
-			// 		Authorization:this.user.password
-			// 	}
-			// }).then(response => {
-			// 	let result = response.data;
-			// 	this.availablePointArr = result;
-			// }).catch(error => {
-			// 	console.error(error);
-			// });
 		},
 		computed: {
-			// totalPoint() {
-			// 	let totalPoint = 0;
-			// 	for (let item of this.availablePointArr) {
-			// 		totalPoint += item.pointNum;
-			// 	}
-			// 	return totalPoint;
-			// },
-			// del() {
-			// 	return Math.floor(this.totalPoint/100);
-			// },
 			totalPrice() {
 				let totalPrice = 0;
 				for (let cartItem of this.cartArr) {
 					totalPrice += cartItem.food.foodPrice * cartItem.quantity;
 				}
 				totalPrice += this.business.deliveryPrice;
-				// totalPrice -= this.del;
+
+				//积分券包界面新增
+				if (this.couponUsed != null) {
+					totalPrice -= this.couponUsed.minusNum;
+				}
 				return totalPrice;
 			}
 		},
@@ -144,24 +126,48 @@
 				}
 
 				//创建订单
-        let url=`OrdersController/createOrders/${this.user.userId}/${this.businessId}/${this.deliveryaddress.daId}/${this.totalPrice}`
+
+				let url =
+					`OrdersController/createOrders/${this.user.userId}/${this.businessId}/${this.deliveryaddress.daId}/${this.totalPrice}`
 				this.$axios.post(url).then(response => {
 					let orderId = response.data.result;
 					if (orderId > 0) {
+						//积分系统新增代码
+						if (this.couponUsed != null) {
+							this.$axios.delete(
+								`CouponController/deleteCouponByCouponId/${this.couponUsed.couponId}`);
+						}
 						this.$router.push({
 							path: '/payment',
 							query: {
 								orderId: orderId,
 								userId: this.user.userId,
-								reduction: this.del
+								reduction: this.couponUsed === null ? 0 : this.couponUsed.minusNum
 							}
 						});
+						this.$removeSessionStorage(this.businessId);
+
 					} else {
 						alert('创建订单失败！');
 					}
 				}).catch(error => {
 					console.error(error);
 				});
+			},
+			toCouponSelect() {
+				this.$router.push({
+					path: '/CouponSelect',
+					query: {
+						businessId: this.businessId
+					}
+				});
+			},
+			getCouponName() {
+				if (this.couponUsed == null) {
+					return "不使用优惠券";
+				} else {
+					return "满" + this.couponUsed.limitNum + "减" + this.couponUsed.minusNum + "优惠券";
+				}
 			}
 		}
 	}
@@ -274,7 +280,7 @@
 	.wrapper .order-detailed {
 		width: 100%;
 	}
-	
+
 	.wrapper .order-detailed li {
 		width: 100%;
 		height: 16vw;
@@ -315,6 +321,19 @@
 		justify-content: space-between;
 		align-items: center;
 		font-size: 3.5vw;
+	}
+
+	.wrapper .coupon-select {
+		width: 100%;
+		height: 16vw;
+		box-sizing: border-box;
+		padding: 3vw;
+		color: #666;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 3.5vw;
+		cursor: pointer;
 	}
 
 	/****************** 订单合计部分 ******************/

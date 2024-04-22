@@ -67,6 +67,22 @@
 						<span>&#62;</span>
 					</div>
 				</li>
+				<!-- 积分商城，积分系统新增部分 -->
+				<li>
+					<div class="red" @click="toPointStore">
+						<img src="../assets/img/红包.png">
+						<p>积分商城</p>
+						<span>&#62;</span>
+					</div>
+				</li>
+
+				<li>
+					<div class="red" @click="toCouponDetails">
+						<img src="../assets/img/红包.png">
+						<p>我的券包</p>
+						<span>&#62;</span>
+					</div>
+				</li>
 			</div>
 
 			<li @click="toaddress()">
@@ -154,7 +170,7 @@
 			},
 			toPointsdetails() {
 				this.$router.push({
-					path: '/pointsdetails'
+					path: '/pointsDetails'
 				});
 			},
 			toWallet() {
@@ -172,6 +188,18 @@
 			toaddress() {
 				this.$router.push({
 					path: '/userAddress'
+				});
+			},
+			// 积分系统新增部分
+			toPointStore() {
+				console.log("to Point Store");
+				this.$router.push({
+					path: '/PointStore'
+				});
+			},
+			toCouponDetails() {
+				this.$router.push({
+					path: '/CouponDetails'
 				});
 			}
 		}
@@ -338,6 +366,8 @@
 		align-items: center;
 	}
 
+
+	/*****退出账号*****/
 	.wrapper .quit {
 		display: flex;
 		align-items: center;
@@ -351,10 +381,22 @@
 		align-items: center;
 		justify-content: center;
 		font-size: 5vw;
-		color: black;
+		color: white;
 		border-radius: 1vw;
 		user-select: none;
 		cursor: pointer;
-		border: solid 2px #000000;
+		background-color: #01B0F2;
+		transition: background-color 0.3s, transform 0.2s;
+		/* 添加过渡效果 */
+	}
+
+	.wrapper .quit p:hover {
+		transform: scale(1.1);
+		/* 鼠标悬停放大 */
+	}
+
+	.wrapper .quit p:active {
+		background-color: #0077b6;
+		/* 点击变色 */
 	}
 </style>

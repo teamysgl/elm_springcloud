@@ -22,7 +22,7 @@
 		computed: {
 			sum() {
 				return this.availablePointArr.reduce((accumulator, currentValue) => accumulator + currentValue.pointNum,
-				0);
+					0);
 			}
 		},
 		created() {

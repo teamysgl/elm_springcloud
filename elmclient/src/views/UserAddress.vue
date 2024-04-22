@@ -57,7 +57,7 @@
 			},
 			listDeliveryAddressByUserId() {
 				//查询送货地址
-        let url=`DeliveryAddressController/listDeliveryAddressByUserId/${this.user.userId}`
+				let url = `DeliveryAddressController/listDeliveryAddressByUserId/${this.user.userId}`
 				this.$axios.get(url).then(response => {
 					this.deliveryAddressArr = response.data.result;
 				}).catch(error => {
@@ -95,7 +95,7 @@
 				if (!confirm('确认要删除此送货地址吗？')) {
 					return;
 				}
-        let url=`DeliveryAddressController/removeDeliveryAddress/${daId}`
+				let url = `DeliveryAddressController/removeDeliveryAddress/${daId}`
 				this.$axios.delete(url).then(response => {
 					if (response.data.result > 0) {
 						let deliveryAddress = this.$getLocalStorage(this.user.userId);

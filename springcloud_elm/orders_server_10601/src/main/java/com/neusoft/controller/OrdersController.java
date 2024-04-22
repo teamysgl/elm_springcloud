@@ -43,9 +43,4 @@ public class OrdersController {
         List<Orders> list=ordersService.listOrdersByUserId(userId);
         return new CommonResult<>(200,"success",list);
     }
-
-//    @PutMapping("/Orders")
-//    public int payOrdersById(OrderState orderState, @RequestHeader("Authorization") String token) throws Exception {
-//        return ordersService.payOrdersById(orderState.getOrderId(), orderState.getUserId(), orderState.getOrderTotal(), orderState.getReduction(),token);
-//    }
 }

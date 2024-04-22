@@ -76,7 +76,7 @@
 				this.$router.go(-1);
 			},
 			checkUserId() {
-        let url=`UserController/getUserById/${this.user.userId}`
+				let url = `UserController/getUserById/${this.user.userId}`
 				this.$axios.get(url).then(response => {
 					if (response.data.result == 1) {
 						this.user.userId = '';
@@ -104,7 +104,8 @@
 					return;
 				}
 				//注册请求
-        let url=`UserController/saveUser/${this.user.userId}/${this.user.password}/${this.user.userName}/${this.user.userSex}`
+				let url =
+					`UserController/saveUser/${this.user.userId}/${this.user.password}/${this.user.userName}/${this.user.userSex}`
 				this.$axios.post(url).then(response => {
 					if (response.data.result > 0) {
 						alert('注册成功！');

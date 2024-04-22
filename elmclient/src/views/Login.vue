@@ -67,16 +67,16 @@
 			},
 			login() {
 				if (this.userId == '') {
-					this.numNull=true;
+					this.numNull = true;
 					setTimeout(() => {
-					this.numNull = false;
+						this.numNull = false;
 					}, 2000);
 					return;
 				}
 				if (this.password == '') {
-					this.passNull=true;
+					this.passNull = true;
 					setTimeout(() => {
-					this.passNull = false;
+						this.passNull = false;
 					}, 2000);
 					return;
 				} else {
@@ -84,23 +84,23 @@
 					if (userIdString.length === 11 && !isNaN(userIdString) && userIdString.startsWith('1')) {
 						// 数字以1开头，有11位，且全为数字
 					} else {
-						this.numError=true;
+						this.numError = true;
 						setTimeout(() => {
-						this.numError = false;
+							this.numError = false;
 						}, 2000);
 						return;
 					}
 				}
 
 				//登录请求
-        let url=`UserController/getUserByIdByPass/${this.userId}/${this.password}`
+				let url = `UserController/getUserByIdByPass/${this.userId}/${this.password}`
 				this.$axios.get(url).then(response => {
 					let user = response.data.result;
 					if (user == null) {
 						alert('用户名或密码不正确！');
 					} else {
 						//sessionstorage有容量限制，为了防止数据溢出，所以不将userImg数据放入session中
-						
+
 						this.$setSessionStorage('user', user);
 						this.$router.go(-1);
 					}
@@ -227,5 +227,15 @@
 
 		border: none;
 		outline: none;
+	}
+
+	.wrapper .button-login button:hover {
+		background-color: #539e31;
+		/* 鼠标悬停时按钮颜色变化 */
+	}
+
+	.wrapper .button-register button:hover {
+		background-color: #9a9e9a;
+		/* 鼠标悬停时按钮颜色变化 */
 	}
 </style>

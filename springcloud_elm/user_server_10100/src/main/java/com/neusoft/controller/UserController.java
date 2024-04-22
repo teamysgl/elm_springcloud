@@ -12,25 +12,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/UserController")
 public class UserController {
 
+    private final UserServiceAdapter userServiceAdapter;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserServiceAdapter userServiceAdapter) {
+        this.userServiceAdapter = userServiceAdapter;
+    }
 
     @GetMapping("/getUserByIdByPass/{userId}/{password}")
     public CommonResult<User> getUserByIdByPass(
             @PathVariable("userId") String userId,
             @PathVariable("password") String password
     ) throws Exception {
-        User param=new User();
-        param.setUserId(userId);
-        param.setPassword(password);
-        User user= userService.getUserByIdByPass(param);
-        return new CommonResult<>(200,"success",user);
+        return userServiceAdapter.getUserByIdByPass(userId, password);
     }
 
     @GetMapping("/getUserById/{userId}")
     public CommonResult<Integer> getUserById(@PathVariable("userId") String userId) throws Exception {
-        int result=userService.getUserById(userId);
-        return new CommonResult<>(200,"success",result);
+        return userServiceAdapter.getUserById(userId);
     }
 
     @PostMapping("/saveUser/{userId}/{password}/{userName}/{userSex}")
@@ -40,12 +39,6 @@ public class UserController {
             @PathVariable("userName") String userName,
             @PathVariable("userSex") Integer userSex
     ) throws Exception {
-        User param=new User();
-        param.setUserId(userId);
-        param.setPassword(password);
-        param.setUserName(userName);
-        param.setUserSex(userSex);
-        int result=userService.saveUser(param);
-        return new CommonResult<>(200,"success",result);
+        return userServiceAdapter.saveUser(userId, password, userName, userSex);
     }
 }

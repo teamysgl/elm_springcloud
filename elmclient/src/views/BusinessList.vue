@@ -46,10 +46,10 @@
 			this.user = this.$getSessionStorage('user');
 
 			//根据orderTypeId查询商家信息
-      let url=`BusinessController/listBusinessByOrderTypeId/${this.orderTypeId}`
+			let url = `BusinessController/listBusinessByOrderTypeId/${this.orderTypeId}`
 			this.$axios.get(url).then(response => {
 				this.businessArr = response.data.result;
-        console.log(response.data.message);
+				console.log(response.data.message);
 				//判断是否登录
 				if (this.user != null) {
 					this.listCart();
@@ -66,7 +66,7 @@
 				this.$router.go(-1);
 			},
 			listCart() {
-        let url=`CartController/listCart/${this.user.userId}`
+				let url = `CartController/listCart/${this.user.userId}`
 				this.$axios.get(url).then(response => {
 					let cartArr = response.data.result;
 					//遍历所有食品列表
@@ -155,9 +155,32 @@
 		background-color: #fff;
 		cursor: pointer;
 		border-radius: 2vw;
-
 		display: flex;
 		align-items: center;
+		animation: fadeIn 1.0s ease forwards;
+		opacity: 0;
+		/* 初始透明度为0 */
+		transition: background-color 0.3s, transform 0.3s;
+	}
+
+	.wrapper .business li:hover .border {
+		background-color: #E0F2FE;
+		transform: scale(1.05);
+	}
+
+	.wrapper .business li:active .border {
+		border: 2px solid #FF5722;
+		transform: scale(0.95);
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
 	}
 
 	.wrapper .business li .border .business-img {
@@ -168,6 +191,15 @@
 		width: 20vw;
 		height: 20vw;
 		border-radius: 2vw;
+		transition: transform 0.3s;
+	}
+
+	.wrapper .business li .border:hover .business-img img {
+		transform: scale(1.1);
+	}
+
+	.wrapper .business li .border:active .business-img img {
+		transform: scale(0.9);
 	}
 
 	.wrapper .business li .border .business-img .business-img-quantity {

@@ -37,7 +37,7 @@
 						</ul>
 					</li>
 					<li class="li1">
-						<ul class="details"  v-for="item in availablePointArr">
+						<ul class="details" v-for="item in availablePointArr">
 							<li>
 								<h4>{{item.pointDate}}</h4>
 							</li>
@@ -65,7 +65,7 @@
 						</ul>
 					</li>
 					<li class="li1">
-						<ul class="details"  v-for="item in outDatePointArr">
+						<ul class="details" v-for="item in outDatePointArr">
 							<li>
 								<h4>{{item.pointDate}}</h4>
 							</li>
@@ -97,36 +97,41 @@
 		computed: {
 			sum() {
 				return this.availablePointArr.reduce((accumulator, currentValue) => accumulator + currentValue.pointNum,
-				0);
+					0);
 			}
 		},
 		created() {
+			console.log("PointsDetail, Here");
 			this.user = this.$getSessionStorage('user');
 
-			this.$axios.get('PointController/AvailablePoints',{
-				params:{
+			this.$axios.get('PointController/AvailablePoints', {
+				params: {
 					userId: this.user.userId
 				},
 				headers: {
-					Authorization:this.user.password
+					Authorization: this.user.password
 				}
 			}).then(response => {
-				let result = response.data;
+				// 积分系统新增的改动
+				let result = response.data.result;
 				this.availablePointArr = result;
+				console.log(response);
+				// console.log(this.user.userId+" "+this.user.password);
 			}).catch(error => {
 				console.error(error);
 			});
 
-			this.$axios.get('PointController/OutofDatePoints',{
-				params:{
+			this.$axios.get('PointController/OutofDatePoints', {
+				params: {
 					userId: this.user.userId
 				},
 				headers: {
-					Authorization:this.user.password
+					Authorization: this.user.password
 				}
 			}).then(response => {
-				let result = response.data;
+				let result = response.data.result;
 				this.outDatePointArr = result;
+				console.log("outDatePoint:\n" + result)
 			}).catch(error => {
 				console.error(error);
 			});

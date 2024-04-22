@@ -7,7 +7,7 @@
 		<!-- 订单列表部分 -->
 		<h3>未支付订单信息：</h3>
 		<ul class="order">
-			<li v-for="item in orderArr" >
+			<li v-for="item in orderArr">
 				<div class="order-info" v-if="item.orderState==0">
 					<p>
 						{{item.business.businessName}}
@@ -15,7 +15,10 @@
 					</p>
 					<div class="order-info-right">
 						<p>&#165;{{item.orderTotal}}</p>
-						<div class="order-info-right-icon" @click="toPayment(item.orderId,reduction(item.orderTotal,item.list,item.business.deliveryPrice))">去支付</div>
+						<div class="order-info-right-icon"
+							@click="toPayment(item.orderId,reduction(item.orderTotal,item.list,item.business.deliveryPrice))">
+							去支付</div>
+
 					</div>
 				</div>
 				<ul class="order-detailet" v-show="item.isShowDetailet" v-if="item.orderState==0">
@@ -34,9 +37,10 @@
 				</ul>
 			</li>
 		</ul>
+
 		<h3>已支付订单信息：</h3>
 		<ul class="order">
-			<li v-for="item in orderArr" >
+			<li v-for="item in orderArr">
 				<div class="order-info" v-if="item.orderState==1">
 					<p>
 						{{item.business.businessName}}
@@ -66,6 +70,8 @@
 		<Footer></Footer>
 	</div>
 </template>
+
+
 <script>
 	import Footer from '../components/Footer.vue';
 
@@ -79,7 +85,7 @@
 		},
 		created() {
 			this.user = this.$getSessionStorage('user');
-      let url=`OrdersController/listOrdersByUserId/${this.user.userId}`
+			let url = `OrdersController/listOrdersByUserId/${this.user.userId}`
 			this.$axios.get(url).then(response => {
 				let result = response.data.result;
 				for (let orders of result) {
@@ -95,7 +101,7 @@
 			detailetShow(orders) {
 				orders.isShowDetailet = !orders.isShowDetailet;
 			},
-			toPayment(orderId,reduction) {
+			toPayment(orderId, reduction) {
 				this.$router.push({
 					path: '/payment',
 					query: {
@@ -105,19 +111,22 @@
 					}
 				});
 			},
-			reduction(orderTotal,itemList,deliveryPrice) {
-				let sum=0.0;
-				for(let i of itemList){
-					sum+=i.food.foodPrice*i.quantity;
+			reduction(orderTotal, itemList, deliveryPrice) {
+				let sum = 0.0;
+				for (let i of itemList) {
+					sum += i.food.foodPrice * i.quantity;
 				}
-				return (sum+deliveryPrice-orderTotal).toFixed(2);
+				return (sum + deliveryPrice - orderTotal).toFixed(2);
 			}
+
 		},
 		components: {
 			Footer
 		}
 	}
 </script>
+
+
 <style scoped>
 	/****************** 总容器 ******************/
 	.wrapper {
