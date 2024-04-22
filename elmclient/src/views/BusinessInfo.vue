@@ -90,17 +90,17 @@
 		created() {
 			this.user = this.$getSessionStorage('user');
 			//根据businessId查询商家信息
-      let url=`BusinessController/getBusinessById/${this.businessId}`
+			let url = `BusinessController/getBusinessById/${this.businessId}`
 			this.$axios.get(url).then(response => {
 				this.business = response.data.result;
-        this.foodArr = this.business.foodList;
-        for (let i = 0; i < this.foodArr.length; i++) {
-          this.foodArr[i].quantity = 0;
-        }
-        //如果已登录，那么需要去查询购物车中是否已经选购了某个食品
-        if (this.user != null) {
-          this.listCart();
-        }
+				this.foodArr = this.business.foodList;
+				for (let i = 0; i < this.foodArr.length; i++) {
+					this.foodArr[i].quantity = 0;
+				}
+				//如果已登录，那么需要去查询购物车中是否已经选购了某个食品
+				if (this.user != null) {
+					this.listCart();
+				}
 			}).catch(error => {
 				console.error(error);
 			});
@@ -110,7 +110,7 @@
 				this.$router.go(-1);
 			},
 			listCart() {
-        let url=`CartController/listCart/${this.user.userId}/${this.businessId}`
+				let url = `CartController/listCart/${this.user.userId}/${this.businessId}`
 				this.$axios.get(url).then(response => {
 					let cartArr = response.data.result;
 					//遍历所有食品列表
@@ -166,7 +166,7 @@
 				this.interval = 200;
 			},
 			savaCart(index) {
-        let url=`CartController/saveCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}`
+				let url = `CartController/saveCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}`
 				this.$axios.post(url).then(response => {
 					if (response.data.result == 1) {
 						//此食品数量要更新为1；
@@ -180,7 +180,8 @@
 				});
 			},
 			updateCart(index, num) {
-        let url=`CartController/updateCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}/${this.foodArr[index].quantity + num}`
+				let url =
+					`CartController/updateCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}/${this.foodArr[index].quantity + num}`
 				this.$axios.put(url).then(response => {
 					if (response.data.result == 1) {
 						//此食品数量要更新为1或-1；
@@ -194,7 +195,7 @@
 				});
 			},
 			removeCart(index) {
-        let url=`CartController/removeCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}`
+				let url = `CartController/removeCart/${this.user.userId}/${this.businessId}/${this.foodArr[index].foodId}`
 				this.$axios.delete(url).then(response => {
 					if (response.data.result == 1) {
 						//此食品数量要更新为0；视图的减号和数量要消失

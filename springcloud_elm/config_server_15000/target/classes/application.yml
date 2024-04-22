@@ -8,7 +8,7 @@ spring:
     config:
       server:
         git:
-          uri: https://gitee.com/ehusoeasom/elm-scc.git
+          uri: https://gitee.com/liang-yizhuo/elm-scc.git
   rabbitmq:
     host: 127.0.0.1
     port: 5672

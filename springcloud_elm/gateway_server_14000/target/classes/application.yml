@@ -12,15 +12,16 @@ spring:
             allowedOrigins: "*"
             allowedHeaders: "*"
             allowedMethods:
-            - GET
-            - POST
-            - PUT
-            - DELETE
+              - GET
+              - POST
+              - PUT
+              - DELETE
       default-filters:
-        - name: Hystrix
-          args:
-            name: fallbackcmd
-            fallbackUri: forward:/fallback
+      
+        #f- name: Hystrix
+         # args:
+         #   name: fallbackcmd
+          #  fallbackUri: forward:/fallback
       routes:
         - id: userServer
           uri: lb://user-server
@@ -45,12 +46,33 @@ spring:
         - id: deliveryaddressServer
           uri: lb://deliveryaddress-server
           predicates:
-            - Path=/DeliveryaddressController/*/**
+            - Path=/DeliveryAddressController/*/**
 
         - id: ordersServer
           uri: lb://orders-server
           predicates:
             - Path=/OrdersController/*/**
+
+        - id: searchServer
+          uri: lb://search-server
+          predicates:
+            - Path=/SearchController/*/**
+
+        - id: pointServer
+          uri: lb://point-server
+          predicates:
+            - Path=/PointController/*/**
+
+        - id: couponServer
+          uri: lb://coupon-server
+          predicates:
+            - Path=/CouponController/*/**
+            
+        - id: walletServer
+          uri: lb://wallet-server
+          predicates:
+            - Path=/WalletController/*/**
+        
 
 eureka:
   client:

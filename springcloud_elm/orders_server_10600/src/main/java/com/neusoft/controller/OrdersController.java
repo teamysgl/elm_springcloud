@@ -44,6 +44,12 @@ public class OrdersController {
         return new CommonResult<>(200,"success",list);
     }
 
+    @PutMapping("/Orders/{orderId}")
+    public CommonResult<Integer>payOrdersById(@PathVariable("orderId") Integer orderId)throws Exception
+    {
+        int result=ordersService.payOrdersById(orderId, null, null, null);
+        return new CommonResult<>(200,"success",result);
+    }
 //    @PutMapping("/Orders")
 //    public int payOrdersById(OrderState orderState, @RequestHeader("Authorization") String token) throws Exception {
 //        return ordersService.payOrdersById(orderState.getOrderId(), orderState.getUserId(), orderState.getOrderTotal(), orderState.getReduction(),token);

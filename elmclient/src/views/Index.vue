@@ -8,19 +8,20 @@
 			<div class="location-text">天津大学北洋园校区<i class="fa fa-caret-down"></i></div>
 		</header>
 		<!-- search部分 -->
-		<!-- 
+		<!--
 	 搜索框部分（此块与search-fixed-top块宽度高度一致，用于当
 	 search-fixed-top块固定后，挡住下面块不要窜上去）
 	 -->
-		<div class="search">
-			<!-- 当滚动条超过上面的定位块时，search-fixed-top块变成固定在顶部。 -->
-			<div class="search-fixed-top" ref="fixedBox">
-				<!-- 搜索框部分中间的白框 -->
-				<div class="search-box">
-					<i class="fa fa-search"></i>搜索饿了么商家、商品名称
-				</div>
-			</div>
-		</div>
+    <div class="search">
+      <!-- 当滚动条超过上面的定位块时，search-fixed-top块变成固定在顶部。 -->
+      <div class="search-fixed-top" ref="fixedBox">
+        <!-- 搜索框部分中间的白框 -->
+        <div class="search-box">
+          <i @click="toSearch()" :class="{'fa fa-search': true, 'blue-icon': keyword!==''}"></i>
+          <input type="text" v-model="keyword" placeholder="搜索饿了么商家、商品名称" @keydown.enter="toSearch()" >
+        </div>
+      </div>
+    </div>
 		<!-- 点餐分类部分 -->
 		<ul class="foodtype">
 			<li @click="toBusinessList(1)">
@@ -135,7 +136,7 @@
 					</div>
 					<div class="business-info-promotion">
 						<div class="business-info-promotion-left">
-							<div class="business-info-promotion-left-incon" style="backgroundcolor: #F1884F;">特</div>
+							<div class="business-info-promotion-left-incon" style="background-color: #F1884F;">特</div>
 							<p>特价商品5元起</p>
 						</div>
 					</div>
@@ -331,6 +332,11 @@
 	import Footer from '../components/Footer.vue';
 	export default {
 		name: 'Index',
+    data(){
+      return{
+        keyword: ''
+      }
+    },
 		mounted() {
 			document.onscroll = () => {
 				//获取滚动条位置
@@ -370,7 +376,16 @@
 						orderTypeId: orderTypeId
 					}
 				});
-			}
+			},
+      toSearch(){
+        if(this.keyword==='') return;
+        this.$router.push({
+          path: '/searchResults',
+          query: {
+            keyword: this.keyword
+          }
+        });
+      }
 		}
 
 	}
@@ -460,9 +475,20 @@
 		user-select: none;
 	}
 
+  .wrapper .search .search-fixed-top .search-box input{
+    border: none;
+    outline: none;
+    height: 4vw;
+    font-size: 3vw;
+  }
+
 	.wrapper .search .search-fixed-top .search-box .fa-search {
 		margin-right: 1vw;
 	}
+
+  .blue-icon {
+    color: #01B0F2;
+  }
 
 	/****************** 点餐分类部分 ******************/
 	.wrapper .foodtype {
