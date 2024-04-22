@@ -17,6 +17,13 @@
 			<p>&#165;{{business.starPrice}}起送 &#165;{{business.deliveryPrice}}配送</p>
 			<p>{{business.businessExplain}}</p>
 		</div>
+    <!-- 添加收藏按钮 -->
+    <div v-if="this.isCollected" @click="toggleCollect(business)" class="collect-button0">
+      取消收藏
+    </div>
+    <div v-if="!this.isCollected" @click="toggleCollect(business)" class="collect-button1">
+      收藏
+    </div>
 
 		<!-- 食品列表部分 -->
 		<ul class="food">
@@ -84,7 +91,8 @@
 				longPress: false,
 				pressTimer: null,
 				interval: 200,
-				clickTimeouts: [] // 用于存储每个按钮的定时器
+				clickTimeouts: [], // 用于存储每个按钮的定时器
+        isCollected: false
 			}
 		},
 		created() {
@@ -104,11 +112,26 @@
 			}).catch(error => {
 				console.error(error);
 			});
+      this.listCollect()
 		},
 		methods: {
 			back() {
 				this.$router.go(-1);
 			},
+      async listCollect() {
+        let url = `CollectController/listCollect/${this.user.userId}`
+        await this.$axios.get(url).then(response => {
+          this.collectList = response.data.result;
+        }).catch(error => {
+          console.error(error);
+        });
+        for(let i of this.collectList){
+          if(`${i.businessId}`===this.businessId){
+            this.isCollected=true
+            break
+          }
+        }
+      },
 			listCart() {
         let url=`CartController/listCart/${this.user.userId}/${this.businessId}`
 				this.$axios.get(url).then(response => {
@@ -214,7 +237,18 @@
 						businessId: this.business.businessId
 					}
 				});
-			}
+			},
+      toggleCollect(business) {
+        this.isCollected = !this.isCollected; // 切换收藏状态
+        let method = this.isCollected ? 'post' : 'delete';
+        let url = `CollectController/${method === 'post' ? 'add' : 'delete'}Collect/${this.user.userId}/${this.businessId}`;
+        this.$axios({
+          method: method,
+          url: url
+        }).then().catch(error => {
+          console.error(error);
+        });
+      }
 		},
 		computed: {
 			//食品总价格
@@ -316,6 +350,31 @@
 		color: #666;
 		margin-top: 1.2vw;
 	}
+
+  /****************收藏按钮***************/
+  .wrapper .collect-button0 {
+    position: fixed;
+    font-size: 3vw;
+    color: white;
+    background-color: gray;
+    align-items: center;
+    justify-content: center;
+    padding: 1vw;
+    right: 0;
+    top: 13vw;
+  }
+
+  .wrapper .collect-button1 {
+    position: fixed;
+    font-size: 3vw;
+    color: white;
+    background-color: #01B0F2;
+    align-items: center;
+    justify-content: center;
+    padding: 1vw;
+    right: 0;
+    top: 13vw;
+  }
 
 	/****************食品信息部分***************/
 	.wrapper .food {

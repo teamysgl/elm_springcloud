@@ -16,6 +16,7 @@ spring:
               - POST
               - PUT
               - DELETE
+              - PATCH
       default-filters:
         - name: Hystrix
           args:
@@ -66,6 +67,11 @@ spring:
           uri: lb://coupon-server
           predicates:
             - Path=/CouponController/*/**
+
+        - id: collectServer
+          uri: lb://collect-server
+          predicates:
+            - Path=/CollectController/*/**
 
 eureka:
   client:

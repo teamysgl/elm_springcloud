@@ -21,6 +21,7 @@ import SearchResults from "../views/SearchResults";
 import PointStore from '../views/PointStore.vue';
 import CouponDetails from '../views/CouponDetails.vue';
 import CouponSelect from '../views/CouponSelect.vue';
+import CollectList from '../views/CollectList.vue'
 
 
 const routes = [{
@@ -104,6 +105,11 @@ const routes = [{
 		path: '/CouponSelect',
 		name: 'CouponSelect',
 		component: CouponSelect
+	},
+	{
+		path: '/collectList',
+		name: 'CollectList',
+		component: CollectList
 	}
 ];
 

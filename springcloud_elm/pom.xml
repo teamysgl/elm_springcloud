@@ -26,6 +26,7 @@
         <module>search_server_11600</module>
         <module>point_server_10900</module>
         <module>coupon_server_10950</module>
+        <module>collect_server_10800</module>
     </modules>
     <packaging>pom</packaging>
 
