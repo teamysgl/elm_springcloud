@@ -44,7 +44,7 @@
     <!-- 合计部分 -->
     <div class="total">
       <div class="total-left">
-        &#165;{{ totalPrice }}
+        &#165;{{ finalPrice }}
       </div>
       <div class="box">
         <div class="total-right" @click="toPayment">
@@ -66,10 +66,14 @@ export default {
       cartArr: [],
       deliveryaddress: {},
       availablePointArr: [],
-      couponUsed: {}
+      couponUsed: {},
+
     }
   },
   created() {
+    // 首先初始化finalPrice
+    // finalPrice=totalPrice;
+
     this.user = this.$getSessionStorage('user');
     this.deliveryaddress = this.$getLocalStorage(this.user.userId);
     this.couponUsed = this.$getLocalStorage(this.businessId);
@@ -96,13 +100,25 @@ export default {
         totalPrice += cartItem.food.foodPrice * cartItem.quantity;
       }
       totalPrice += this.business.deliveryPrice;
-
+      //积分券包界面新增
+      // if (this.couponUsed != null) {
+      // 	totalPrice -= this.couponUsed.minusNum;
+      // }
+      return totalPrice;
+    },
+    finalPrice() {
+      let totalPrice = 0;
+      for (let cartItem of this.cartArr) {
+        totalPrice += cartItem.food.foodPrice * cartItem.quantity;
+      }
+      totalPrice += this.business.deliveryPrice;
       //积分券包界面新增
       if (this.couponUsed != null) {
         totalPrice -= this.couponUsed.minusNum;
       }
       return totalPrice;
     }
+
   },
   methods: {
     back() {
@@ -126,25 +142,30 @@ export default {
       }
 
       //创建订单
-
-      let url = `OrdersController/createOrders/${this.user.userId}/${this.businessId}/${this.deliveryaddress.daId}/${this.totalPrice}`
+      let finalPrice = this.totalPrice;
+      if (this.couponUsed != null) {
+        finalPrice -= this.couponUsed.minusNum;
+      }
+      let url =
+          `OrdersController/createOrders/${this.user.userId}/${this.businessId}/${this.deliveryaddress.daId}/${this.finalPrice}`
       this.$axios.post(url).then(response => {
         let orderId = response.data.result;
         if (orderId > 0) {
           //积分系统新增代码
           if (this.couponUsed != null) {
-            this.$axios.delete(`CouponController/deleteCouponByCouponId/${this.couponUsed.couponId}`);
+            this.$axios.delete(
+                `CouponController/deleteCouponByCouponId/${this.couponUsed.couponId}`);
           }
           this.$router.push({
             path: '/payment',
             query: {
               orderId: orderId,
               userId: this.user.userId,
-              reduction: this.couponUsed===null?0:this.couponUsed.minusNum
+              reduction: this.couponUsed === null ? 0 : this.couponUsed.minusNum
             }
           });
-          this.$removeSessionStorage(this.businessId);
-
+          this.$setLocalStorage(this.businessId,null);
+          console.log("this.$removeSessionStorage(this.businessId)");
         } else {
           alert('创建订单失败！');
         }
@@ -153,13 +174,13 @@ export default {
       });
     },
     toCouponSelect() {
-      this.$router.push(
-          {
-            path: '/CouponSelect',
-            query: {
-              businessId: this.businessId
-            }
-          });
+      this.$router.push({
+        path: '/CouponSelect',
+        query: {
+          businessId: this.businessId,
+          totalPrice: this.totalPrice
+        }
+      });
     },
     getCouponName() {
       if (this.couponUsed == null) {

@@ -73,6 +73,11 @@ spring:
           predicates:
             - Path=/CollectController/*/**
 
+        - id: walletServer
+          uri: lb://wallet-server
+          predicates:
+            - Path=/WalletController/*/**
+
 eureka:
   client:
     service-url:

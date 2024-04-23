@@ -9,29 +9,29 @@
     <h3>订单信息：</h3>
     <div class="order-info">
       <p>
-        {{orders.business.businessName}}
+        {{ orders.business.businessName }}
         <i class="fa fa-caret-down" @click="detailetShow"></i>
       </p>
-      <p>&#165;{{orders.orderTotal}}</p>
+      <p>&#165;{{ orders.orderTotal }}</p>
     </div>
     <!-- 订单明细部分 -->
     <ul class="order-detailet" v-show="isShowDetailet">
       <li v-for="item in orders.list">
-        <p>{{item.food.foodName}} x {{item.quantity}}</p>
-        <p>&#165;{{item.food.foodPrice*item.quantity}}</p>
+        <p>{{ item.food.foodName }} x {{ item.quantity }}</p>
+        <p>&#165;{{ item.food.foodPrice * item.quantity }}</p>
       </li>
       <li>
         <p>配送费</p>
-        <p>&#165;{{orders.business.deliveryPrice}}</p>
+        <p>&#165;{{ orders.business.deliveryPrice }}</p>
       </li>
       <li>
         <p>消费券减免</p>
-        <p>-&#165;{{reduction}}</p>
+        <p>-&#165;{{ reduction }}</p>
       </li>
       <!-- 积分系统新增显示 -->
       <li>
         <p>获得积分</p>
-        <p>{{orders.orderTotal*10}}</p>
+        <p>{{ orders.orderTotal * 10 }}</p>
       </li>
     </ul>
     <!-- 支付方式部分 -->
@@ -45,10 +45,13 @@
       </li>
     </ul>
     <div class="payment-button">
-      <button  :style="{ backgroundColor: isPayed ? 'gray' :  '#38CA73'}" @click="pay">确认支付</button>
+      <button :style="{ backgroundColor: isPayed ? 'gray' :  '#38CA73'}" @click="pay">确认支付</button>
     </div>
     <h2 v-show="paySuccess" style="color: #0097FF;text-align: center;">
       支付成功！
+    </h2>
+    <h2 v-show="noMoney" style="color: red;text-align: center;">
+      钱包余额不足！
     </h2>
     <!-- 底部菜单部分 -->
     <Footer></Footer>
@@ -56,6 +59,7 @@
 </template>
 <script>
 import Footer from '../components/Footer.vue';
+
 export default {
   name: 'Payment',
   data() {
@@ -68,11 +72,12 @@ export default {
       },
       isShowDetailet: false,
       paySuccess: false,
-      isPayed: false
+      isPayed: false,
+      noMoney: false
     }
   },
   created() {
-    let url=`OrdersController/getOrdersById/${this.orderId}`
+    let url = `OrdersController/getOrdersById/${this.orderId}`
     this.$axios.get(url).then(response => {
       this.orders = response.data.result;
     }).catch(error => {
@@ -94,66 +99,57 @@ export default {
     window.onpopstate = null;
   },
   computed: {
-    pointGot(){
-      let res=this.orders.orderTotal+this.reduction;
+    pointGot() {
+      let res = this.orders.orderTotal + this.reduction;
       return Math.floor(res);
     }
   },
   methods: {
+    back() {
+      this.$router.go(-1);
+    },
     detailetShow() {
       this.isShowDetailet = !this.isShowDetailet;
     },
     pay() {
-      // this.$axios.put('OrdersController/Orders', this.$qs.stringify({
-      // 	orderId: this.orderId,
-      // 	userId: this.userId,
-      // 	orderTotal: this.orders.orderTotal,
-      // 	reduction: this.reduction
-      // }),{
-      // 	headers: {
-      // 		Authorization:this.$getSessionStorage('user').password
-      // 	}
-      // }).then(response => {
-      // 	let orderId = response.data;
-      // 	if (orderId > 0) {
-      // 		this.paySuccess=true;
-      // 		this.isPayed=true;
-      // 		setTimeout(() => {
-      // 			this.$router.push({
-      // 			path: '/orderList'
-      // 		});
-      // 		}, 500);
-      // 	} else {
-      // 		alert('支付失败！');
-      // 	}
-      // }).catch(error => {
-      // 	console.error(error);
-      // });
+      let url0 = `WalletController/expense/${this.userId}/${this.orders.orderTotal}`;
+      let url = `OrdersController/Orders/${this.orderId}`;
 
-      console.log("Kicked");
-      let url=`OrdersController/Orders/${this.orderId}`
-      this.$axios.put(url)
-          .then(
-              response =>
-              {
-                console.log(response);
-                console.log("支付成功");
-                let url=`PointController/addPointByPointId/${this.userId}/${this.orders.orderDate}/${this.orders.orderTotal*10}`
-                console.log(url);
-                this.$axios.post(url).then(response =>
-                {
-                  console.log(response.data);
-                });
-                this.$router.push({path:'/orderList'});
-              }
-          )
-          .catch(error =>
-              {
-                console.error(error);
-              }
-          );
-
-
+      this.$axios.post(url0)
+          .then(response => {
+            if (response.data.result === 1) {
+              // url0 返回 1，继续执行 url
+              this.$axios.put(url)
+                  .then(response => {
+                    let url =
+                        `PointController/addPointByPointId/${this.userId}/${this.orders.orderDate}/${this.orders.orderTotal * 10}`;
+                    console.log(url);
+                    this.$axios.post(url)
+                        .then(response => {
+                          console.log(response.data);
+                        });
+                    this.paySuccess = true;
+                    this.isPayed = true;
+                    setTimeout(() => {
+                      this.$router.push({
+                        path: '/orderList'
+                      })
+                    }, 500);
+                  })
+                  .catch(error => {
+                    console.error(error);
+                  });
+            } else {
+              // url0 返回非 1，输出提示信息
+              this.noMoney = true
+              setTimeout(() => {
+                this.noMoney = false
+              }, 1000);
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
     }
   },
   components: {

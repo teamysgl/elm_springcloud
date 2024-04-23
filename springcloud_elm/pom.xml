@@ -27,6 +27,7 @@
         <module>point_server_10900</module>
         <module>coupon_server_10950</module>
         <module>collect_server_10800</module>
+        <module>wallet_server_11000</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -25,7 +25,11 @@
         <module name="deliveryaddress_server_10500" />
         <module name="search_server_11600" />
         <module name="business_server_10300" />
+        <module name="wallet_server_11000" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="wallet_server_10800" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
