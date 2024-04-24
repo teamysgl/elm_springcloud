@@ -6,7 +6,6 @@ package com.neusoft.controller;
 import com.neusoft.po.Business;
 import com.neusoft.po.CommonResult;
 import com.neusoft.po.Food;
-import com.neusoft.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,18 +19,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/SearchController")
 public class SearchController {
+
+    private final SearchStrategy<Food> foodSearchStrategy;
+    private final SearchStrategy<Business> businessSearchStrategy;
+
     @Autowired
-    private SearchService searchService;
+    public SearchController(SearchStrategy<Food> foodSearchStrategy, SearchStrategy<Business> businessSearchStrategy) {
+        this.foodSearchStrategy = foodSearchStrategy;
+        this.businessSearchStrategy = businessSearchStrategy;
+    }
 
     @GetMapping("/listFoodByKeyword/{keyword}")
     public CommonResult<List<Food>> listFoodByKeyword(@PathVariable("keyword") String keyword) throws Exception {
-        List<Food> list= searchService.listFoodByKeyword(keyword);
-        return new CommonResult<>(200,"success",list);
+        List<Food> list = foodSearchStrategy.search(keyword);
+        return new CommonResult<>(200, "success", list);
     }
 
     @GetMapping("/listBusinessByKeyword/{keyword}")
     public CommonResult<List<Business>> listBusinessByKeyword(@PathVariable("keyword") String keyword) throws Exception {
-        List<Business> list= searchService.listBusinessByKeyword(keyword);
-        return new CommonResult<>(200,"success",list);
+        List<Business> list = businessSearchStrategy.search(keyword);
+        return new CommonResult<>(200, "success", list);
     }
 }

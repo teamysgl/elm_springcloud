@@ -22,7 +22,11 @@
 				<div class="box" v-show="islogin">
 					<div v-if="user">
 						<!-- 在这里使用 user 对象的属性 -->
+<<<<<<< Updated upstream
 						<h2 style="font-size: 4.5vw;">{{this.user.userName}}</h2>
+=======
+						<h2 style="font-size: 4.5vw;">{{ this.user.userName }}</h2>
+>>>>>>> Stashed changes
 					</div>
 					<div class="line">
 						<p>我的关注</p>
@@ -93,7 +97,11 @@
 				</div>
 			</li>
 
+<<<<<<< Updated upstream
 			<li>
+=======
+			<li @click="toCollect()">
+>>>>>>> Stashed changes
 				<div class="favourite">
 					<img src="../assets/img/爱心.png">
 					<p>我的收藏</p>
@@ -102,6 +110,7 @@
 			</li>
 
 			<div class="cooperate">
+<<<<<<< Updated upstream
 				<li>
 					<div class="judgement">
 						<img src="../assets/img/点赞.png">
@@ -114,10 +123,40 @@
 					<div class="onlinehelp">
 						<img src="../assets/img/客服.png">
 						<p>线上客服</p>
+=======
+
+				<li @click="toJudge()">
+					<div class="judgement">
+						<img src="../assets/img/点赞.png">
+						<p>欢迎评分</p>
+>>>>>>> Stashed changes
 						<span>&#62;</span>
 					</div>
 				</li>
 
+				<li>
+					<div class="onlinehelp">
+<<<<<<< Updated upstream
+						<img src="../assets/img/握手.png">
+						<p>加盟合作</p>
+=======
+						<img src="../assets/img/客服.png">
+						<p>线上客服</p>
+>>>>>>> Stashed changes
+						<span>&#62;</span>
+					</div>
+				</li>
+
+<<<<<<< Updated upstream
+			</div>
+
+		</ul>
+
+		<div class="quit">
+			<p @click="toquit()">退出当前账号</p>
+		</div>
+
+=======
 				<li>
 					<div class="onlinehelp">
 						<img src="../assets/img/握手.png">
@@ -134,12 +173,17 @@
 			<p @click="toquit()">退出当前账号</p>
 		</div>
 
+>>>>>>> Stashed changes
 		<Footer></Footer>
 	</div>
 </template>
 
 <script>
 	import Footer from '../components/Footer.vue';
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 	export default {
 		name: 'My',
 		data() {
@@ -201,7 +245,25 @@
 				this.$router.push({
 					path: '/CouponDetails'
 				});
+<<<<<<< Updated upstream
 			}
+=======
+			},
+			//收藏部分
+			toCollect() {
+				this.$router.push({
+					path: '/CollectList'
+				});
+			},
+
+			//评分部分
+			toJudge() {
+				this.$router.push({
+					path: '/Judge'
+				});
+			}
+
+>>>>>>> Stashed changes
 		}
 	};
 </script>
@@ -366,6 +428,7 @@
 		align-items: center;
 	}
 
+<<<<<<< Updated upstream
 
 	/*****退出账号*****/
 	.wrapper .quit {
@@ -375,16 +438,30 @@
 		padding: 6vw 0vw 20vw 0vw;
 	}
 
+=======
+	.wrapper .quit {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 6vw 0vw 20vw 0vw;
+	}
+
+>>>>>>> Stashed changes
 	.wrapper .quit p {
 		padding: 1.5vw;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+<<<<<<< Updated upstream
 		font-size: 5vw;
+=======
+		font-size: 4vw;
+>>>>>>> Stashed changes
 		color: white;
 		border-radius: 1vw;
 		user-select: none;
 		cursor: pointer;
+<<<<<<< Updated upstream
 		background-color: #01B0F2;
 		transition: background-color 0.3s, transform 0.2s;
 		/* 添加过渡效果 */
@@ -398,5 +475,9 @@
 	.wrapper .quit p:active {
 		background-color: #0077b6;
 		/* 点击变色 */
+=======
+		border: none;
+		background-color: #01B0F2;
+>>>>>>> Stashed changes
 	}
 </style>

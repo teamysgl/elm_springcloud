@@ -1,21 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.neusoft</groupId>
-    <artifactId>springcloud_elm</artifactId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
-<<<<<<<< Updated upstream:springcloud_elm/point_server_10900/target/classes/META-INF/maven/com.neusoft/point_server_10900/pom.xml
-  <artifactId>point_server_10900</artifactId>
-========
-  <artifactId>wallet_server_11000</artifactId>
->>>>>>>> Stashed changes:springcloud_elm/business_server_10300/target/classes/META-INF/maven/com.neusoft/wallet_server_11000/pom.xml
-  
-  <properties>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.neusoft</groupId>
+        <artifactId>springcloud_elm</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>collect_server_10800</artifactId>
+
+    <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -60,9 +60,10 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-        	<groupId>com.neusoft</groupId>
-        	<artifactId>business_server_10300</artifactId>
-        	<version>1.0-SNAPSHOT</version>
+            <groupId>com.neusoft</groupId>
+            <artifactId>business_server_10300</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
 </project>

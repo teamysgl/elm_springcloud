@@ -18,10 +18,6 @@
 						<div class="order-info-right-icon"
 							@click="toPayment(item.orderId,reduction(item.orderTotal,item.list,item.business.deliveryPrice))">
 							去支付</div>
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 					</div>
 				</div>
 				<ul class="order-detailet" v-show="item.isShowDetailet" v-if="item.orderState==0">
@@ -40,7 +36,6 @@
 				</ul>
 			</li>
 		</ul>
-
 		<h3>已支付订单信息：</h3>
 		<ul class="order">
 			<li v-for="item in orderArr">
@@ -73,8 +68,6 @@
 		<Footer></Footer>
 	</div>
 </template>
-
-
 <script>
 	import Footer from '../components/Footer.vue';
 
@@ -121,15 +114,12 @@
 				}
 				return (sum + deliveryPrice - orderTotal).toFixed(2);
 			}
-
 		},
 		components: {
 			Footer
 		}
 	}
 </script>
-
-
 <style scoped>
 	/****************** 总容器 ******************/
 	.wrapper {
