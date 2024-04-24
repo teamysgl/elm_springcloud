@@ -4,7 +4,7 @@
 
     <header>
       <i class="fa fa-angle-left" @click="back"></i>
-      <p>修改地址</p>
+      <p>添加地址</p>
     </header>
 
     <div class="shangbiao">
