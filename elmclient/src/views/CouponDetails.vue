@@ -18,8 +18,8 @@
 
 		<div class="points-detail">
 			<div class="top">
-				<p :class="{ active: isShouzhi }" @click="toggleTab('shouzhi')">可用积分</p>
-				<p :class="{ active: !isShouzhi }" @click="toggleTab('duihuan')">已过期积分</p>
+				<p :class="{ active: isShouzhi }" @click="toggleTab('shouzhi')">可用券包</p>
+				<p :class="{ active: !isShouzhi }" @click="toggleTab('duihuan')">已过期券包</p>
 			</div>
 			<div class="border">
 				<ul class="get-pay" v-show="isShouzhi">
