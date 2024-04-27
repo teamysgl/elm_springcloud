@@ -16,6 +16,12 @@ public class OrdersController {
     @Autowired
     private OrdersService ordersService;
 
+    private final CommonResultFactory commonResultFactory;
+
+    public OrdersController(CommonResultFactory commonResultFactory) {
+        this.commonResultFactory = commonResultFactory;
+    }
+
     @PostMapping("/createOrders/{userId}/{businessId}/{daId}/{orderTotal}")
     public CommonResult<Integer> createOrders(
             @PathVariable("userId") String userId,
@@ -29,21 +35,29 @@ public class OrdersController {
         param.setDaId(daId);
         param.setOrderTotal(orderTotal);
         int orderId=ordersService.createOrders(param);
-        return new CommonResult<>(200,"success",orderId);
+        return commonResultFactory.createSuccessResult(orderId);
     }
 
     @GetMapping("/getOrdersById/{orderId}")
     public CommonResult<Orders> getOrdersById(@PathVariable("orderId") Integer orderId) throws Exception {
         Orders orders=ordersService.getOrdersById(orderId);
-        return new CommonResult<>(200,"success",orders);
+        return commonResultFactory.createSuccessResult(orders);
     }
 
     @GetMapping("/listOrdersByUserId/{userId}")
     public CommonResult<List<Orders>> listOrdersByUserId(@PathVariable("userId") String userId) throws Exception {
         List<Orders> list=ordersService.listOrdersByUserId(userId);
-        return new CommonResult<>(200,"success",list);
+        return commonResultFactory.createSuccessResult(list);
     }
 
+    @PutMapping("/Orders/{orderId}")
+    public CommonResult<Integer>payOrdersById(@PathVariable("orderId") Integer orderId)throws Exception
+    {
+    	int result=ordersService.payOrdersById(orderId, null, null, null);
+    	return commonResultFactory.createSuccessResult(result);
+    }
+    
+    
 //    @PutMapping("/Orders")
 //    public int payOrdersById(OrderState orderState, @RequestHeader("Authorization") String token) throws Exception {
 //        return ordersService.payOrdersById(orderState.getOrderId(), orderState.getUserId(), orderState.getOrderTotal(), orderState.getReduction(),token);
