@@ -4,17 +4,15 @@
     <!-- header部分 -->
     <header>
       <i class="fa fa-angle-left" @click="back"></i>
-      <p>商家列表</p>
+      <p>我的收藏</p>
+
     </header>
-
-    <!-- 商家列表部分 -->
+    <!-- 收藏列表 -->
     <ul class="business">
-
       <li v-for="item in businessArr" @click="toBusinessInfo(item.businessId)">
         <div class="border">
           <div class="business-img">
             <img :src="item.businessImg">
-            <div class="business-img-quantity" v-show="item.quantity>0">{{item.quantity}}</div>
           </div>
           <div class="business-info">
             <h3>{{item.businessName}}</h3>
@@ -25,19 +23,17 @@
       </li>
 
     </ul>
-
     <Footer></Footer>
   </div>
 </template>
 
 <script>
-import Footer from '../components/Footer.vue';
-
+import Footer from "../components/Footer.vue";
 export default {
-  name: 'BusinessList',
+  name: 'CollectList',
   data() {
     return {
-      orderTypeId: this.$route.query.orderTypeId,
+      collectList: [],
       businessArr: [],
       user: {}
     }
@@ -45,18 +41,7 @@ export default {
   created() {
     this.user = this.$getSessionStorage('user');
 
-    //根据orderTypeId查询商家信息
-    let url = `BusinessController/listBusinessByOrderTypeId/${this.orderTypeId}`
-    this.$axios.get(url).then(response => {
-      this.businessArr = response.data.result;
-      console.log(response.data.message);
-      //判断是否登录
-      if (this.user != null) {
-        this.listCart();
-      }
-    }).catch(error => {
-      console.error(error);
-    });
+    this.listCollect();
   },
   components: {
     Footer
@@ -65,25 +50,25 @@ export default {
     back() {
       this.$router.go(-1);
     },
-    listCart() {
-      let url = `CartController/listCart/${this.user.userId}`
-      this.$axios.get(url).then(response => {
-        let cartArr = response.data.result;
-        //遍历所有食品列表
-        for (let businessItem of this.businessArr) {
-          businessItem.quantity = 0;
-          for (let cartItem of cartArr) {
-            if (cartItem.businessId == businessItem.businessId) {
-              businessItem.quantity += cartItem.quantity;
-            }
-          }
-        }
-        this.businessArr.sort();
+    async listCollect() {
+      let url = `CollectController/listCollect/${this.user.userId}`
+      await this.$axios.get(url).then(response => {
+        this.collectList = response.data.result;
       }).catch(error => {
         console.error(error);
       });
+      this.listBusinesses()
     },
-
+    listBusinesses(){
+      for(let collect of this.collectList){
+        let url=`BusinessController/getBusinessById/${collect.businessId}`
+        this.$axios.get(url).then(response => {
+          this.businessArr.push(response.data.result);
+        }).catch(error => {
+          console.error(error);
+        });
+      }
+    },
     toBusinessInfo(businessId) {
       this.$router.push({
         path: '/businessInfo',
@@ -155,32 +140,9 @@ export default {
   background-color: #fff;
   cursor: pointer;
   border-radius: 2vw;
+
   display: flex;
   align-items: center;
-  animation: fadeIn 1.0s ease forwards;
-  opacity: 0;
-  /* 初始透明度为0 */
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.wrapper .business li:hover .border {
-  background-color: #E0F2FE;
-  transform: scale(1.05);
-}
-
-.wrapper .business li:active .border {
-  border: 2px solid #FF5722;
-  transform: scale(0.95);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
 }
 
 .wrapper .business li .border .business-img {
@@ -191,15 +153,6 @@ export default {
   width: 20vw;
   height: 20vw;
   border-radius: 2vw;
-  transition: transform 0.3s;
-}
-
-.wrapper .business li .border:hover .business-img img {
-  transform: scale(1.1);
-}
-
-.wrapper .business li .border:active .business-img img {
-  transform: scale(0.9);
 }
 
 .wrapper .business li .border .business-img .business-img-quantity {
